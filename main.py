@@ -41,7 +41,7 @@ def main():
         row = parse_table(h4.find_next_sibling('table'))
         for name, score in row.items():
             if name not in data['data'][level]:
-                data['data'][level][name] = [0] * len(data.dates)
+                data['data'][level][name] = [0] * len(data['dates'])
             data['data'][level][name].append(score)
     data['dates'].append(today)
 
