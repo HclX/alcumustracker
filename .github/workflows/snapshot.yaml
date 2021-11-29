@@ -1,8 +1,8 @@
 name: Taking snapshot of the Alcumus website
 on:
-  workflow_dispatch:
   schedule:
-    - cron:  '11 6,12,15 * * *'
+    - cron:  '30 6,12,15 * * *'
+  workflow_dispatch:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
