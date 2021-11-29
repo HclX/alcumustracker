@@ -23,7 +23,7 @@ def parse_table(table):
     return row
 
 def main():
-    with open('data.json', 'r') as f:
+    with open('docs/data.json', 'r') as f:
         data = json.load(f)
 
     today = date.today().strftime('%m/%d/%Y')
@@ -45,7 +45,7 @@ def main():
             data['data'][level][name].append(score)
     data['dates'].append(today)
 
-    with open('data.json', 'w') as f:
+    with open('docs/data.json', 'w') as f:
         json.dump(data, f, indent=2, ignore_nan=True)
 
 main()
