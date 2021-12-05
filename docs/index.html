@@ -7,21 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alcumus Data Tracker</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="main.js"></script>
 </head>
 
 <body>
-  <div style="width:90%">
-    <canvas id="myChart"></canvas>
+  <div style="width:90%;height:90%">
+    <canvas id="myChart" style="min-height:320px;"></canvas>
   </div>
-  <div id="level">
-    <button onclick="displayLevel('Prealgebra')">Pre-Algebra</button>
-    <button onclick="displayLevel('Algebra 1')">Algebra 1</button>
-    <button onclick="displayLevel('Algebra 2')">Algebra 2</button>
-    <button onclick="displayLevel('Geometry')">Geometry</button>
+  <div style="position:absolute;top:10px;left:60px">
+    <label>Level:</label>
+    <select name="Level" onchange="displayLevel(this.options[this.selectedIndex].value)">
+      <option value="Prealgebra">Pre-Algebra</option>
+      <option value="Algebra 1" selected>Algebra 1</option>
+      <option value="Algebra 2">Algebra 2</option>
+      <option value="Geometry">Geometry</option>
+    </select>
   </div>
 </body>
-
 </html>

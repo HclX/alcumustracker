@@ -5,9 +5,18 @@ var gConfig = {
     options: {
         responsive: true,
         title: {
-            display: true,
+            display: false,
             text: 'Dummy'
         },
+        datasets: {
+            line: {
+                pointHitRadius: 15,
+                tension: 0.3,
+            },
+        },
+        legend: {
+            position: "top",
+        }
     }
 };
 
@@ -17,7 +26,8 @@ function initDataset(data) {
     var dataset = Object.keys(data).map((user) => ({
         data: data[user],
         label: user,
-        fill: false}));
+        fill: false,
+        hidden: false}));
 
     dataset.sort((a, b) => b.data[b.data.length - 1] - a.data[a.data.length - 1]);
     dataset = dataset.splice(0, gColors.length);
