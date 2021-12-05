@@ -1,4 +1,3 @@
-var gLevel = "Algebra 1";
 var gLabels = null;
 var gDatasets = {};
 var gConfig = {
@@ -29,17 +28,21 @@ function initDataset(data) {
     return dataset;
 }
 
+function displayLevel(level) {
+    gLevel = level;
+    gConfig.data = {labels: gLabels, datasets: gDatasets[gLevel]};
+    gConfig.options.title.text = gLevel;
+    gChart.update();
+}
+
 function initData() {
     $.getJSON("data.json", function(json) {
         gLabels = json.dates;
         for (var level in json.data) {
             gDatasets[level] = initDataset(json.data[level]);
         }
-
-        gConfig.data = {labels: gLabels, datasets: gDatasets[gLevel]};
-        gConfig.options.title.text = gLevel;
-        
-        gChart.update();
+        var DEFAULT_LEVEL = "Algebra 1";
+        displayLevel(DEFAULT_LEVEL);
     });
 }
 
