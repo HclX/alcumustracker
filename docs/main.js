@@ -41,7 +41,6 @@ function initDataset(data) {
 function displayLevel(level) {
     gLevel = level;
     gConfig.data = {labels: gLabels, datasets: gDatasets[gLevel]};
-    gConfig.options.title.text = gLevel;
     gChart.update();
 }
 
