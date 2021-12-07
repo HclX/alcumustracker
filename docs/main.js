@@ -4,6 +4,7 @@ var gConfig = {
     type: 'line',
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         title: {
             display: false,
             text: 'Dummy'
@@ -17,7 +18,11 @@ var gConfig = {
         legend: {
             position: "top",
         }
-    }
+    },
+    data: {
+        labels: [],
+        datasets: [],
+    },
 };
 
 const gColors = ["red", "blue", "green", "purple", "teal"];
@@ -29,7 +34,7 @@ function initDataset(data) {
         fill: false,
         hidden: false}));
 
-    dataset.sort((a, b) => b.data[b.data.length - 1] - a.data[a.data.length - 1]);
+    dataset.sort((a, b) => b.data.at(-1) - a.data.at(-1));
     dataset = dataset.splice(0, gColors.length);
     dataset.forEach((value, index) => {
         value.borderColor = gColors[index];
@@ -58,5 +63,6 @@ function initData() {
 $(function() {
     const ctx = $('#myChart');
     gChart = new Chart(ctx, gConfig);
+    window.addEventListener('resize', function () { gChart.resize() })
     initData();
 });
