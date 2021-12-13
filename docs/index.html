@@ -17,11 +17,17 @@
   </div>
   <div style="position:absolute;top:3%;left:5%">
     <label>Level:</label>
-    <select name="Level" onchange="displayLevel(this.options[this.selectedIndex].value)">
+    <select id="level" onchange="refresh()">
       <option value="Prealgebra">Pre-Algebra</option>
       <option value="Algebra 1" selected>Algebra 1</option>
       <option value="Algebra 2">Algebra 2</option>
       <option value="Geometry">Geometry</option>
+    </select>
+    <label>Range:</label>
+    <select id="range" onchange="refresh()">
+      <option value="10" selected>Last 10 days</option>
+      <option value="30">Last month</option>
+      <option value="-1">All</option>
     </select>
   </div>
 </body>

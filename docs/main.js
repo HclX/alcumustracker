@@ -1,5 +1,4 @@
-var gLabels = null;
-var gDatasets = {};
+var gJsonData = {};
 var gConfig = {
     type: 'line',
     options: {
@@ -17,7 +16,15 @@ var gConfig = {
         },
         legend: {
             position: "top",
-        }
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 15
+                }
+            }],
+        },
     },
     data: {
         labels: [],
@@ -25,48 +32,71 @@ var gConfig = {
     },
 };
 
-const DISPLAY_DAYS = 10;
-const gColors = ["red", "blue", "green", "purple", "teal"];
+const PLAYER_COLORS = ["red", "blue", "green", "purple", "teal"];
+function selectData(data, range) {
+    if (range > 0)
+        return data.slice(-range);
+    else
+        return data;
+}
 
-function initDataset(data) {
-    var dataset = Object.keys(data).map((user) => ({
-        data: data[user].slice(-DISPLAY_DAYS),
-        label: user,
+function initLabel(data, range) {
+    return selectData(data, range);
+}
+
+function initDataset(data, range) {
+    var dataset = Object.keys(data).map((player) => ({
+        data: selectData(data[player], range),
+        label: player,
         fill: false,
         hidden: false}));
 
+    // Only display the first N players based on latest score
     dataset.sort((a, b) => b.data.at(-1) - a.data.at(-1));
-    dataset = dataset.splice(0, gColors.length);
-    dataset.forEach((value, index) => {
-        value.borderColor = gColors[index];
-    });
+    dataset = dataset.splice(0, PLAYER_COLORS.length);
 
-    for (let i = dataset.length - 1; i >0; i --) {
+    // Hiding lower score players if they haven't done anything during
+    // the display period
+    for (let i = dataset.length - 1; i > 0; i --) {
         if (dataset[i].data.at(0) != dataset[i].data.at(-1)) {
             break;
         }
-
         dataset[i].hidden = true;
     }
+
+    // Sorting the data again by player name, so we can assign a stable color
+    // to each player.
+    dataset.sort((a, b) => a > b ? 1 : -1);
+    dataset.forEach((value, index) => {
+        value.borderColor = PLAYER_COLORS[index];
+    });
+
+    // Adjust the order back by score
+    dataset.sort((a, b) => b.data.at(-1) - a.data.at(-1));
 
     return dataset;
 }
 
-function displayLevel(level) {
-    gLevel = level;
-    gConfig.data = {labels: gLabels, datasets: gDatasets[gLevel]};
+function displayData(level, range) {
+    var labels = initLabel(gJsonData.dates, range);
+    var datasets = initDataset(gJsonData.data[level], range);
+
+    gConfig.data.labels = labels;
+    gConfig.data.datasets = datasets;
     gChart.update();
 }
 
 function initData() {
     $.getJSON("data.json", function(json) {
-        gLabels = json.dates.slice(-DISPLAY_DAYS);
-        for (var level in json.data) {
-            gDatasets[level] = initDataset(json.data[level]);
-        }
-        var DEFAULT_LEVEL = "Algebra 1";
-        displayLevel(DEFAULT_LEVEL);
+        gJsonData = json;
+        refresh();
     });
+}
+
+function refresh() {
+    var level = $('#level').val();
+    var range = $('#range').val();
+    displayData(level, range);
 }
 
 $(function() {
