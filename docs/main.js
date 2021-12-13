@@ -25,11 +25,12 @@ var gConfig = {
     },
 };
 
+const DISPLAY_DAYS = 10;
 const gColors = ["red", "blue", "green", "purple", "teal"];
 
 function initDataset(data) {
     var dataset = Object.keys(data).map((user) => ({
-        data: data[user],
+        data: data[user].slice(-DISPLAY_DAYS),
         label: user,
         fill: false,
         hidden: false}));
@@ -39,6 +40,14 @@ function initDataset(data) {
     dataset.forEach((value, index) => {
         value.borderColor = gColors[index];
     });
+
+    for (let i = dataset.length - 1; i >0; i --) {
+        if (dataset[i].data.at(0) != dataset[i].data.at(-1)) {
+            break;
+        }
+
+        dataset[i].hidden = true;
+    }
 
     return dataset;
 }
@@ -51,7 +60,7 @@ function displayLevel(level) {
 
 function initData() {
     $.getJSON("data.json", function(json) {
-        gLabels = json.dates;
+        gLabels = json.dates.slice(-DISPLAY_DAYS);
         for (var level in json.data) {
             gDatasets[level] = initDataset(json.data[level]);
         }
